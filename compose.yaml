@@ -1,0 +1,55 @@
+networks:
+  network4:
+    name: network4
+
+services:
+  nginx4:
+    container_name: nginx4
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/var/www/public
+      - ./docker/nginx/vhost.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - network4
+    depends_on:
+      - php4
+      - mysql4
+
+  php4:
+    container_name: php4
+    build: docker/php
+    volumes:
+      - ./:/var/www
+    networks:
+      - network4
+    depends_on:
+      - mysql4
+
+  mysql4:
+    image: mysql
+    container_name: mysql4
+    restart: always
+    user: "1000:1000"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=form_db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - network4
+
+  phpmyadmin4:
+    container_name: phpmyadmin4
+    image: phpmyadmin
+    ports:
+      - "1500:80"
+    environment:
+      - PMA_HOST=mysql4
+    networks:
+      - network4
+    depends_on:
+      - mysql4
