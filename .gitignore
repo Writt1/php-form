@@ -2,4 +2,3 @@
 /vendor/
 mysql-data/
 .env
-config.php
