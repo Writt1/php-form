@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require __DIR__ . '/../config.php';
 
 if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
@@ -37,7 +37,7 @@ unset($_SESSION['login_errors']);
     <div
             id="captcha-container"
             class="smart-captcha"
-            data-sitekey="ysc1_dyhsjgywe76dgY1oGIUVX1rQSekdLHG9pNGDIBYTef9df8be"
+            data-sitekey="<?= getenv('SMARTCAPTCHA_CLIENT_KEY') ?>"
             style="height: 100px"
     >
         <input type="hidden" name="smart-token" value="">
